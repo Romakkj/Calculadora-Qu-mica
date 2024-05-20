@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadoras Químicas</title>
+    <!-- Importar a fonte Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Poppins, sans-serif;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            height: 100vh;
+            margin: 0;
+            background-color:linear-gradient(to right, #4facfe, #00f2fe) ;;
+        }
+        .calculator {
+            width: 300px;
+            padding: 20px;
+            margin: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.100);
+            text-align: center;
+        }
+        h1 {
+            color: #4facfe;
+        }
+        input {
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+     	padding: 12px 24px;
+     	font-size: 16px;
+      	background: linear-gradient(to right, #4facfe, #00f2fe);
+      	color: #fff;
+      	border: none;
+      	border-radius: 25px;
+      	cursor: pointer;
+      	transition: background 0.3s ease;
+      	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      	font-family: 'Poppins', sans-serif;
+        }
+        .atom-container {
+            width: 300px;
+            height: 300px;
+            margin: 0px;
+            background-color: #fff;
+            border: 2px solid #000;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+        }
+        .atom-info {
+            position: absolute;
+            font-size: 14px;
+            color: #000;
+            padding: 5px;
+        }
+        #elementSymbol {
+            font-size: 72px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        #elementName {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator"> //Calculadora de Massa
+        <h1>Calculadora de Massa Atômica</h1>
+        <label for="protonsMass">Quantidade de Prótons:</label>
+        <input type="number" id="protonsMass"><br>
+        <label for="neutronsMass">Quantidade de Nêutrons:</label>
+        <input type="number" id="neutronsMass"><br>
+        <button onclick="calculateMass()">Calcular Massa Atômica</button>
+        <p id="massResult"></p>
+    </div>
+
+    <div class="calculator">
+        <h1>Calculadora de Cargas</h1> //Calculadora de Cargas
+        <label for="protonsCharge">Quantidade de Prótons:</label>
+        <input type="number" id="protonsCharge"><br>
+        <label for="electronsCharge">Quantidade de Elétrons:</label>
+        <input type="number" id="electronsCharge"><br>
+        <button onclick="calculateCharge()">Calcular Carga</button>
+        <p id="chargeResult"></p>
+    </div>
+
+    <div class="calculator"> 
+        <h1>Identificador de Elementos</h1> //Indentificar os elementos pelo núm. de prótons
+        <label for="protonsElement">Quantidade de Prótons:</label>
+        <input type="number" id="protonsElement"><br>
+        <button onclick="identifyElement()">Identificar Elemento</button>
+        <p id="elementNameResult"></p>
+    </div>
+
+    <div class="calculator">
+        <h1>Monte seu símbolo</h1> //Um símbolo
+        <label for="protonsSymbol">Prótons:</label>
+        <input type="number" id="protonsSymbol"><br>
+        <label for="neutronsSymbol">Nêutrons:</label>
+        <input type="number" id="neutronsSymbol"><br>
+        <label for="electronsSymbol">Elétrons:</label>
+        <input type="number" id="electronsSymbol"><br>
+        <button onclick="buildAtom()">Montar Átomo</button>
+        <div class="atom-container" id="atom">
+            <div class="atom-info" style="top: 10px; left: 10px;" id="massInfo"></div>
+            <div class="atom-info" style="top: 10px; right: 10px;" id="chargeInfo"></div>
+            <div class="atom-info" style="bottom: 10px; left: 10px;" id="protonsInfo"></div>
+            <div id="elementName" style="bottom: 10px; right: 10px;"></div>
+        </div>
+    </div>
+
+    <div class="calculator">
+        <h1>Verificar Família</h1> // Verificar Familia
+        <label for="elementFamily">Elemento:</label>
+        <input type="text" id="elementFamily"><br>
+        <button onclick="checkFamily()">Verificar Família</button>
+        <p id="familyResult"></p>
+    </div>
+ </div>
+    <script>
+        function calculateMass() {
+            const protons = parseInt(document.getElementById('protonsMass').value) || 0;
+            const neutrons = parseInt(document.getElementById('neutronsMass').value) || 0;
+            const atomicMass = protons + neutrons;
+            document.getElementById('massResult').textContent = `A massa atômica é ${atomicMass}`;
+        }
+
+        function calculateCharge() {
+            const protons = parseInt(document.getElementById('protonsCharge').value) || 0;
+            const electrons = parseInt(document.getElementById('electronsCharge').value) || 0;
+
+            if (protons > electrons) {
+                const charge = protons - electrons;
+                document.getElementById('chargeResult').textContent = `Íon positivo (+${charge})`;
+            } else if (electrons > protons) {
+                const charge = electrons - protons;
+                document.getElementById('chargeResult').textContent = `Íon negativo (-${charge})`;
+            } else {
+                document.getElementById('chargeResult').textContent = 'Neutro';
+            }
+        }
+
+        function identifyElement() {
+            const protons = parseInt(document.getElementById('protonsElement').value);
+            const elements = { //Lista dos elementos do 1 ao 118
+                1: 'Hidrogênio', 2: 'Hélio', 3: 'Lítio', 4: 'Berílio', 5: 'Boro', 6: 'Carbono', 7: 'Nitrogênio', 8: 'Oxigênio', 9: 'Flúor', 10: 'Neônio',
+                11: 'Sódio', 12: 'Magnésio', 13: 'Alumínio', 14: 'Silício', 15: 'Fósforo', 16: 'Enxofre', 17: 'Cloro', 18: 'Argônio', 19: 'Potássio', 20: 'Cálcio',
+                21: 'Escândio', 22: 'Titânio', 23: 'Vanádio', 24: 'Crômio', 25: 'Manganês', 26: 'Ferro', 27: 'Cobalto', 28: 'Níquel', 29: 'Cobre', 30: 'Zinco',
+                31: 'Gálio', 32: 'Germânio', 33: 'Arsênio', 34: 'Selênio', 35: 'Bromo', 36: 'Criptônio', 37: 'Rubídio', 38: 'Estrôncio', 39: 'Ítrio', 40: 'Zircônio',
+                41: 'Nióbio', 42: 'Molibdênio', 43: 'Tecnécio', 44: 'Rutênio', 45: 'Ródio', 46: 'Paládio', 47: 'Prata', 48: 'Cádmio', 49: 'Índio', 50: 'Estanho',
+                51: 'Antimônio', 52: 'Telúrio', 53: 'Iodo', 54: 'Xenônio', 55: 'Césio', 56: 'Bário', 57: 'Lantânio', 58: 'Cério', 59: 'Praseodímio', 60: 'Neodímio',
+                61: 'Promécio', 62: 'Samário', 63: 'Európio', 64: 'Gadolínio', 65: 'Térbio', 66: 'Disprósio', 67: 'Hólmio', 68: 'Érbio', 69: 'Túlio', 70: 'Itérbio',
+                71: 'Lutécio', 72: 'Háfnio', 73: 'Tântalo', 74: 'Tungstênio', 75: 'Rênio', 76: 'Ósmio', 77: 'Irídio', 78: 'Platina', 79: 'Ouro', 80: 'Mercúrio',
+                81: 'Tálio', 82: 'Chumbo', 83: 'Bismuto', 84: 'Polônio', 85: 'Astato', 86: 'Radônio', 87: 'Frâncio', 88: 'Rádio', 89: 'Actínio', 90: 'Tório',
+                91: 'Protactínio', 92: 'Urânio', 93: 'Neptúnio', 94: 'Plutônio', 95: 'Amerício', 96: 'Cúrio', 97: 'Berquélio', 98: 'Califórnio', 99: 'Einstênio', 100: 'Férmio',
+                101: 'Mendelévio', 102: 'Nobélio', 103: 'Laurêncio', 104: 'Rutherfórdio', 105: 'Dúbnio', 106: 'Seabórgio', 107: 'Bóhrio', 108: 'Hássio', 109: 'Meitnério',
+                110: 'Darmstádio', 111: 'Roentgênio', 112: 'Copernício', 113: 'Nihônio', 114: 'Fleróvio', 115: 'Moscóvio', 116: 'Livermório', 117: 'Tennessino', 118: 'Oganessônio'
+            };
+
+            const elementName = elements[protons];
+
+            if (elementName) {
+                document.getElementById('elementNameResult').textContent = `Elemento: ${elementName}`;
+            } else {
+                document.getElementById('elementNameResult').textContent = 'Elemento não encontrado';
+            }
+        }
+
+        function buildAtom() {
+            const protons = parseInt(document.getElementById('protonsSymbol').value) || 0;
+            const neutrons = parseInt(document.getElementById('neutronsSymbol').value) || 0;
+            const electrons = parseInt(document.getElementById('electronsSymbol').value) || 0;
+
+            const elements = { //Lista das Siglas de todos os elementos
+                1: 'H', 2: 'He', 3: 'Li', 4: 'Be', 5: 'B', 6: 'C', 7: 'N', 8: 'O', 9: 'F', 10: 'Ne',
+                11: 'Na', 12: 'Mg', 13: 'Al', 14: 'Si', 15: 'P', 16: 'S', 17: 'Cl', 18: 'Ar', 19: 'K', 20: 'Ca',
+                21: 'Sc', 22: 'Ti', 23: 'V', 24: 'Cr', 25: 'Mn', 26: 'Fe', 27: 'Co', 28: 'Ni', 29: 'Cu', 30: 'Zn',
+                31: 'Ga', 32: 'Ge', 33: 'As', 34: 'Se', 35: 'Br', 36: 'Kr', 37: 'Rb', 38: 'Sr', 39: 'Y', 40: 'Zr',
+                41: 'Nb', 42: 'Mo', 43: 'Tc', 44: 'Ru', 45: 'Rh', 46: 'Pd', 47: 'Ag', 48: 'Cd', 49: 'In', 50: 'Sn',
+                51: 'Sb', 52: 'Te', 53: 'I', 54: 'Xe', 55: 'Cs', 56: 'Ba', 57: 'La', 58: 'Ce', 59: 'Pr', 60: 'Nd',
+                61: 'Pm', 62: 'Sm', 63: 'Eu', 64: 'Gd', 65: 'Tb', 66: 'Dy', 67: 'Ho', 68: 'Er', 69: 'Tm', 70: 'Yb',
+                71: 'Lu', 72: 'Hf', 73: 'Ta', 74: 'W', 75: 'Re', 76: 'Os', 77: 'Ir', 78: 'Pt', 79: 'Au', 80: 'Hg',
+                81: 'Tl', 82: 'Pb', 83: 'Bi', 84: 'Po', 85: 'At', 86: 'Rn', 87: 'Fr', 88: 'Ra', 89: 'Ac', 90: 'Th',
+                91: 'Pa', 92: 'U', 93: 'Np', 94: 'Pu', 95: 'Am', 96: 'Cm', 97: 'Bk', 98: 'Cf', 99: 'Es', 100: 'Fm',
+                101: 'Md', 102: 'No', 103: 'Lr', 104: 'Rf', 105: 'Db', 106: 'Sg', 107: 'Bh', 108: 'Hs', 109: 'Mt',
+                110: 'Ds', 111: 'Rg', 112: 'Cn', 113: 'Nh', 114: 'Fl', 115: 'Mc', 116: 'Lv', 117: 'Ts', 118: 'Og'
+            };
+
+            const symbol = elements[protons];
+            const atomContainer = document.getElementById('atom');
+
+            if (symbol) {
+                const charge = protons > electrons ? `+${protons - electrons}` : (protons < electrons ? `-${electrons - protons}` : '0');
+                const elementName = elements[protons];
+                atomContainer.innerHTML = `
+                    <div id="elementSymbol">${symbol}</div>
+                    <div class="atom-info" style="top: 10px; left: 10px;" id="massInfo">Massa: ${protons + neutrons}</div>
+                    <div class="atom-info" style="top: 10px; right: 10px;" id="chargeInfo">Carga: ${charge}</div>
+                    <div class="atom-info" style="bottom: 10px; left: 10px;" id="protonsInfo">Prótons: ${protons}</div>
+                    <div id="elementName" style="bottom: 10px; right: 10px;">${elementName}</div>
+                `;
+            } else {
+                atomContainer.textContent = 'Átomo não formado';
+            }
+        }
+        function showCredits() {
+            const creditsDiv = document.getElementById('credits');
+            creditsDiv.style.display = 'block';
+        }
+
+        function checkFamily() {
+            const element = document.getElementById('elementFamily').value.toLowerCase();
+            const families = { //Lista das familias(Não completos)
+                'lítio': 'Metais alcalinos (Família 1)',
+                'sódio': 'Metais alcalinos (Família 1)',
+                'potássio': 'Metais alcalinos (Família 1)',
+                'rubídio': 'Metais alcalinos (Família 1)',
+                'césio': 'Metais alcalinos (Família 1)',
+                'frâncio': 'Metais alcalinos (Família 1)',
+                'berílio': 'Metais alcalinos terrosos (Família 2)',
+                'magnésio': 'Metais alcalinos terrosos (Família 2)',
+                'cálcio': 'Metais alcalinos terrosos (Família 2)',
+                'estrôncio': 'Metais alcalinos terrosos (Família 2)',
+                'bário': 'Metais alcalinos terrosos (Família 2)',
+                'rádio': 'Metais alcalinos terrosos (Família 2)',
+                'boro': 'Família do Boro (Família 13)',
+                'alumínio': 'Família do Boro (Família 13)',
+                'gálio': 'Família do Boro (Família 13)',
+                'índio': 'Família do Boro (Família 13)',
+                'tálio': 'Família do Boro (Família 13)',
+                'carbono': 'Família do Carbono (Família 14)',
+                'silício': 'Família do Carbono (Família 14)',
+                'germânio': 'Família do Carbono (Família 14)',
+                'estanho': 'Família do Carbono (Família 14)',
+                'chumbo': 'Família do Carbono (Família 14)',
+                'nitrogênio': 'Família do Nitrogênio (Família 15)',
+                'fósforo': 'Família do Nitrogênio (Família 15)',
+                'arsênio': 'Família do Nitrogênio (Família 15)',
+                'antimônio': 'Família do Nitrogênio (Família 15)',
+                'bismuto': 'Família do Nitrogênio (Família 15)',
+                'oxigênio': 'Calcogênios (Família 16)',
+                'enxofre': 'Calcogênios (Família 16)',
+                'selênio': 'Calcogênios (Família 16)',
+                'telúrio': 'Calcogênios (Família 16)',
+                'polônio': 'Calcogênios (Família 16)',
+                'flúor': 'Halogênios (Família 17)',
+                'cloro': 'Halogênios (Família 17)',
+                'bromo': 'Halogênios (Família 17)',
+                'iodo': 'Halogênios (Família 17)',
+                'astato': 'Halogênios (Família 17)',
+                'hélio': 'Gases Nobres (Família 18)',
+                'neônio': 'Gases Nobres (Família 18)',
+                'argônio': 'Gases Nobres (Família 18)',
+                'criptônio': 'Gases Nobres (Família 18)',
+                'xenônio': 'Gases Nobres (Família 18)',
+                'radônio': 'Gases Nobres (Família 18)'
+            };
+
+            const family = families[element];
+
+            if (family) {
+                document.getElementById('familyResult').textContent = `Família: ${family}`;
+            } else {
+                document.getElementById('familyResult').textContent = 'Família não encontrada';
+            }
+        }
+    </script>
+</body>
+</html>
