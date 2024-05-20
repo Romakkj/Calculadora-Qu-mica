@@ -1,4 +1,4 @@
-# Calculadora-Qu-mica
+# Calculadora Qumíca
 Uma calculadora química, bem básica, apenas tem conteúdos de química básica do 9ºano, ela ínclui itens para cálculos como:
 - Cálculadora de Massa Básica (A = Z + N)
 - Cálculadora de Carga (C = Z - E)
